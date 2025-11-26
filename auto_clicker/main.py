@@ -1,9 +1,13 @@
 import tkinter as tk
-from tkinter import ttk, messagebox, simpledialog
+from tkinter import ttk, messagebox, simpledialog, filedialog
 import threading
 import time
 from pynput import mouse, keyboard
 import sys
+import json
+import os
+
+CONFIG_FILE = "config.json"
 
 class StepEditor(simpledialog.Dialog):
     def __init__(self, parent, title, current_data):
@@ -41,11 +45,26 @@ class AutoClickerV2:
         self.mouse_controller = mouse.Controller()
         
         # UI
+        self.create_menu()
         self.create_ui()
         
         # Listeners
         self.kb_listener = keyboard.Listener(on_press=self.on_key_press)
         self.kb_listener.start()
+
+        # Auto Load
+        self.load_last_session()
+
+    def create_menu(self):
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+        
+        file_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Open Script...", command=self.load_script)
+        file_menu.add_command(label="Save Script As...", command=self.save_script)
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=self.on_close)
 
     def create_ui(self):
         # Top Toolbar
@@ -239,6 +258,58 @@ class AutoClickerV2:
         
         self.is_running = False
         self.root.after(0, self.stop_clicking)
+
+    # --- Persistence Methods ---
+    def save_script(self):
+        if not self.steps:
+            messagebox.showwarning("Warning", "Nothing to save.")
+            return
+            
+        file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON Files", "*.json")])
+        if not file_path: return
+        
+        try:
+            with open(file_path, 'w') as f:
+                json.dump(self.steps, f, indent=4)
+            self.status_var.set(f"Saved to {os.path.basename(file_path)}")
+            self.update_config(file_path)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save: {e}")
+
+    def load_script(self):
+        file_path = filedialog.askopenfilename(filetypes=[("JSON Files", "*.json")])
+        if not file_path: return
+        
+        self.load_from_file(file_path)
+
+    def load_from_file(self, file_path):
+        try:
+            with open(file_path, 'r') as f:
+                self.steps = json.load(f)
+            self.refresh_table()
+            self.status_var.set(f"Loaded {os.path.basename(file_path)}")
+            self.update_config(file_path)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load: {e}")
+
+    def update_config(self, file_path):
+        try:
+            config = {'last_file': file_path}
+            with open(CONFIG_FILE, 'w') as f:
+                json.dump(config, f)
+        except:
+            pass # Ignore config errors
+
+    def load_last_session(self):
+        if os.path.exists(CONFIG_FILE):
+            try:
+                with open(CONFIG_FILE, 'r') as f:
+                    config = json.load(f)
+                    last_file = config.get('last_file')
+                    if last_file and os.path.exists(last_file):
+                        self.load_from_file(last_file)
+            except:
+                pass
 
     def on_close(self):
         self.is_running = False
