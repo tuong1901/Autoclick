@@ -35,7 +35,7 @@ class StepEditor(simpledialog.Dialog):
 class AutoClickerV2:
     def __init__(self, root):
         self.root = root
-        self.root.title("Pro Auto Clicker")
+        self.root.title("CTAutoClick")
         self.root.geometry("600x500")
         
         # Data
