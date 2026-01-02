@@ -1,0 +1,81 @@
+{
+    "steps": [
+        {
+            "x": 1344,
+            "y": 709,
+            "delay": 3000,
+            "type": "Left",
+            "ping_multiplier": 100.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1470,
+            "y": 517,
+            "delay": 1000,
+            "type": "Left",
+            "ping_multiplier": 33.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1474,
+            "y": 548,
+            "delay": 1000,
+            "type": "Left",
+            "ping_multiplier": 33.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1444,
+            "y": 578,
+            "type": "Left",
+            "ping_multiplier": 16.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1252,
+            "y": 692,
+            "type": "Left",
+            "ping_multiplier": 16.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1471,
+            "y": 531,
+            "type": "Left",
+            "ping_multiplier": 17.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1340,
+            "y": 706,
+            "type": "Left",
+            "ping_multiplier": 17.0,
+            "custom_delay": 0,
+            "count": 1
+        },
+        {
+            "x": 1340,
+            "y": 706,
+            "type": "Left",
+            "ping_multiplier": 17.0,
+            "custom_delay": 0,
+            "count": 1
+        }
+    ],
+    "settings": {
+        "server": "8.8.8.8",
+        "ping_multiplier": 1.0,
+        "fallback_delay": 100,
+        "use_ping_delay": true,
+        "randomize_position": true,
+        "randomize_timing": true,
+        "position_variance": 4,
+        "timing_variance": 10
+    }
+}
